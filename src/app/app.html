@@ -34,7 +34,13 @@
     <a name="page-top"></a>
 
 
-    <h1>${message}</h1>
+    <h2>Welcome</h2>
+
+    <ul class="list-group">
+        <li repeat.for="study of context.studiesModel.studies">
+            ${study.Name}
+        </li>
+      </ul>
 
 
     <div id="page-anchor"><a href="#page-top"><i class="fa fa-arrow-up"></i> back to top</a></div>

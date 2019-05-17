@@ -11,6 +11,8 @@ export default class Context {
     constructor() {
         this.studiesModel = new StudiesModel(this.baseUrl);
         console.log('studiesModel', this.studiesModel);
+
+        this.studiesModel.loadStudies();
     }
 
 }

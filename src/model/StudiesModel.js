@@ -117,8 +117,8 @@ StudiesModel.prototype.loadStudies = function loadStudies(callback) {
 
   // Load Projects AND Screens, sort them and render...
   Promise.all([
-    fetch(this.baseUrl + "/api/v0/m/projects/"),
-    fetch(this.baseUrl + "/api/v0/m/screens/"),
+    fetch(this.baseUrl + "api/v0/m/projects/"),
+    fetch(this.baseUrl + "api/v0/m/screens/"),
   ]).then(responses =>
       Promise.all(responses.map(res => res.json()))
   ).then(([projects, screens]) => {
@@ -150,7 +150,7 @@ StudiesModel.prototype.loadStudies = function loadStudies(callback) {
 
 
 StudiesModel.prototype.loadStudiesMapAnnotations = function loadStudiesMapAnnotations(callback) {
-  let url = this.baseUrl + "/webclient/api/annotations/?type=map";
+  let url = this.baseUrl + "webclient/api/annotations/?type=map";
   let data = this.studies
     .map(study => `${ study['@type'].split('#')[1].toLowerCase() }=${ study['@id'] }`)
     .join("&");
