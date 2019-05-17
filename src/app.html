@@ -1,0 +1,44 @@
+
+<!-- This template sits right inside <body> -->
+<template>
+    <div class="nav-secondary">
+        <div class="top-bar-right">
+            <ul class="menu">
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-nav-bar top-bar" id="main-menu">
+        <div class="top-bar-left">
+            <ul class="dropdown menu" data-dropdown-menu>
+                <li><a class="logo" href="{% url 'webgallery_index' %}">
+                    <img src="http://idr.openmicroscopy.org/about/img/logos/logo-idr.svg" }}" alt="IDR logo"></a>
+                </li>
+
+                <li>
+                    <a href="cell">
+                      Cell-IDR
+                    </a>
+                </li>
+                <li>
+                    <a href="tissue">
+                      Tissue-IDR
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+    </div>
+
+    <a name="page-top"></a>
+
+
+    <h1>${message}</h1>
+
+
+    <div id="page-anchor"><a href="#page-top"><i class="fa fa-arrow-up"></i> back to top</a></div>
+
+    <hr class="whitespace">
+
+</template>
