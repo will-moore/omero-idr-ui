@@ -4,6 +4,7 @@ import environment from './environment';
 import {PLATFORM} from 'aurelia-pal';
 import jQuery from 'jquery';
 import { Foundation } from 'foundation-sites/js/foundation.core';
+import Context from './app/context';
 // import { Dropdown } from 'foundation-sites/js/foundation.dropdown';
 // import { DropdownMenu } from 'foundation-sites/js/foundation.dropdownMenu';
 
@@ -36,5 +37,9 @@ export function configure(aurelia) {
     aurelia.use.plugin(PLATFORM.moduleName('aurelia-testing'));
   }
 
-  aurelia.start().then(() => aurelia.setRoot(PLATFORM.moduleName('app')));
+  let ctx = new Context();
+  // make the context available everywhere
+  aurelia.container.registerInstance(Context,ctx);
+
+  aurelia.start().then(() => aurelia.setRoot(PLATFORM.moduleName('app/app')));
 }
