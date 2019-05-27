@@ -5,6 +5,7 @@ import {PLATFORM} from 'aurelia-pal';
 import jQuery from 'jquery';
 import { Foundation } from 'foundation-sites/js/foundation.core';
 import Context from './app/context';
+import {RouterConfiguration, Router} from 'aurelia-router';
 // import { Dropdown } from 'foundation-sites/js/foundation.dropdown';
 // import { DropdownMenu } from 'foundation-sites/js/foundation.dropdownMenu';
 
@@ -39,7 +40,7 @@ export function configure(aurelia) {
 
   let ctx = new Context();
   // make the context available everywhere
-  aurelia.container.registerInstance(Context,ctx);
+  aurelia.container.registerInstance(Context, ctx);
 
   aurelia.start().then(() => aurelia.setRoot(PLATFORM.moduleName('app/app')));
 }

@@ -36,11 +36,12 @@
 
     <h2>Welcome</h2>
 
-    <ul class="list-group">
-        <li repeat.for="study of context.studiesModel.studies">
-            ${study.Name}
-        </li>
-      </ul>
+
+    <div style="background: paleturquoise">
+        <router-view studies.bind="context.studiesModel.studies" class="col-md-8"></router-view>
+    </div>
+
+    <button click.trigger="doSearch()">Do Search</button>
 
 
     <div id="page-anchor"><a href="#page-top"><i class="fa fa-arrow-up"></i> back to top</a></div>

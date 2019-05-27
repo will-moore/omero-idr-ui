@@ -1,0 +1,25 @@
+
+<template>
+    <div class="no-selection text-center">
+        <h2>${message}</h2>
+    </div>
+
+    <a route-href="route: search;">
+        <p>Search</p>
+    </a>
+
+
+    <h2>Timelapse</h2>
+    <ul class="list-group">
+        <li repeat.for="study of timelapseStudies">
+            ${study.Name}
+        </li>
+    </ul>
+
+    <h2>Light sheet</h2>
+    <ul class="list-group">
+        <li repeat.for="study of lightSheetStudies">
+            ${study.Name}
+        </li>
+    </ul>
+</template>
