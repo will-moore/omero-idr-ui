@@ -10,22 +10,10 @@
 
     <div class="main-nav-bar top-bar" id="main-menu">
         <div class="top-bar-left">
-            <ul class="dropdown menu" data-dropdown-menu>
-                <li><a class="logo" href="{% url 'webgallery_index' %}">
-                    <img src="http://idr.openmicroscopy.org/about/img/logos/logo-idr.svg" }}" alt="IDR logo"></a>
-                </li>
-
-                <li>
-                    <a href="cell">
-                      Cell-IDR
-                    </a>
-                </li>
-                <li>
-                    <a href="tissue">
-                      Tissue-IDR
-                    </a>
-                </li>
-            </ul>
+            <a href="/">Home</a> |
+            <a route-href="route: search;">Search</a> |
+            <a href="cell">Cell-IDR</a> |
+            <a href="tissue">Tissue-IDR</a>
         </div>
         
     </div>
@@ -36,8 +24,7 @@
 
     <h2>Welcome</h2>
 
-
-    <div style="background: paleturquoise">
+    <div>
         <router-view studies.bind="context.studiesModel.studies" class="col-md-8"></router-view>
     </div>
 

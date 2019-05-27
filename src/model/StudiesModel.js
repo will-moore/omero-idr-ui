@@ -11,7 +11,9 @@ export default class StudiesModel {
 
     this.studies = [];
 
-    this.images = {}
+    this.images = {};
+
+    this.annotationsLoaded = false;
 
     return this;
   }
@@ -142,6 +144,11 @@ export default class StudiesModel {
           return 0;
         });
 
+        this.studies.forEach(study => {
+          study.type = study['@type'].split('#')[1].toLowerCase();
+          study.id = study['@id'];
+        })
+
         // load Map Anns for Studies...
         this.loadStudiesMapAnnotations();
 
@@ -189,6 +196,8 @@ export default class StudiesModel {
           return study;
         });
 
+        this.annotationsLoaded = true;
+
         if (callback) {
           callback();
         };
@@ -221,16 +230,16 @@ export default class StudiesModel {
         let allAnds = true;
         let ands = term.split(' AND ');
         ands.forEach(mustMatch => {
-          let queryKeyValue = mustMatch.split(":");
+          let queryKeyValue = mustMatch.split(':');
           let valueMatch = false;
           // check all key-values (may be duplicate keys) for value that matches
-          for (let i=0; i<study.mapValues.length; i++){
+          for (let i = 0; i < study.mapValues.length; i++) {
             let kv = study.mapValues[i];
             if (kv[0] === queryKeyValue[0]) {
               let value = queryKeyValue[1].trim();
               if (value.substr(0, 4) === 'NOT ') {
                 value = value.replace('NOT ', '');
-                if (kv[1].toLowerCase().indexOf(value.toLowerCase()) == -1) {
+                if (kv[1].toLowerCase().indexOf(value.toLowerCase()) === -1) {
                   valueMatch = true;
                 }
               } else if (kv[1].toLowerCase().indexOf(value.toLowerCase()) > -1) {
@@ -253,9 +262,9 @@ export default class StudiesModel {
   }
 
 
-  loadImage(obj_type, obj_id, callback) {
+  loadImage(objType, objId, callback) {
     // Get a sample image ID for 'screen' or 'project'
-    let key = `${obj_type}-${obj_id}`;
+    let key = `${objType}-${objId}`;
 
     // check cache
     if (this.images[key]) {
@@ -264,8 +273,8 @@ export default class StudiesModel {
     }
 
     let limit = 20;
-    if (obj_type == 'screen') {
-      let url = `${ this.baseUrl }/api/v0/m/screens/${ obj_id }/plates/`;
+    if (objType == 'screen') {
+      let url = `${ this.baseUrl }/api/v0/m/screens/${ objId }/plates/`;
       url += '?limit=1'   // just get first plate
       url += '&_=' + CACHE_BUSTER;
       fetch(url)
@@ -277,14 +286,14 @@ export default class StudiesModel {
           let offset = Math.max(0, parseInt(obj.Rows * obj.Columns * 0.25) - limit);
           let url = `${ this.baseUrl }/api/v0/m/plates/${ obj['@id'] }/wells/?limit=${limit}&offset=${offset}`;
           url += '&_=' + CACHE_BUSTER;
-          return fetch(url)
+          return fetch(url);
         })
         .then(response => response.json())
         .then(data => {
           let wellSample;
-          for (let w=0; w<data.data.length; w++) {
+          for (let w = 0; w < data.data.length; w++) {
             if (data.data[w].WellSamples) {
-              wellSample = data.data[w].WellSamples[0]
+              wellSample = data.data[w].WellSamples[0];
             }
           }
           if (!wellSample) {
@@ -295,16 +304,16 @@ export default class StudiesModel {
           callback(this.images[key]);
           return;
         })
-    } else if (obj_type == 'project') {
-      let url = `${ this.baseUrl }/api/v0/m/projects/${ obj_id }/datasets/`;
-      url += '?limit=1'   // just get first plate
+    } else if (objType === 'project') {
+      let url = `${ this.baseUrl }/api/v0/m/projects/${ objId }/datasets/`;
+      url += '?limit=1';   // just get first plate
       url += '&_=' + CACHE_BUSTER;
       fetch(url)
         .then(response => response.json())
         .then(data => {
           obj = data.data[0];
           if (!obj) {
-            // No Dataset in Project: ' + obj_id;
+            // No Dataset in Project: ' + objId;
             return;
           }
           let url = `${ this.baseUrl }/api/v0/m/datasets/${ obj['@id'] }/images/?limit=1`;
@@ -321,16 +330,16 @@ export default class StudiesModel {
           }
         })
         .catch(error => {
-          console.error("Error loading Image for Project: " + obj_id, error);
+          console.error("Error loading Image for Project: " + objId, error);
         });
     }
   }
 
 
 
-  getImageId(obj_type, obj_id, callback) {
+  getImageId(objType, objId, callback) {
     // Get a sample image ID for 'screen' or 'project'
-    let key = `${obj_type}-${obj_id}`;
+    let key = `${objType}-${objId}`;
 
     // check cache
     if (this.imageIds[key]) {
@@ -338,7 +347,7 @@ export default class StudiesModel {
       return;
     }
 
-    let url = `${ GALLERY_INDEX }study_image/${obj_type}/${ obj_id }/`
+    let url = `${ GALLERY_INDEX }study_image/${objType}/${ objId }/`
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -348,4 +357,57 @@ export default class StudiesModel {
       })
   }
 
+
+  getStudyById(typeId) {
+    // E.g. 'project-1', or 'screen-2'
+    let objType = typeId.split('-')[0];
+    let id = typeId.split('-')[1];
+    for (let i = 0; i < this.studies.length; i++) {
+      let study = this.studies[i];
+      if (study.id == id && study.type === objType) {
+        return study;
+      }
+    }
+  }
+
+
+  loadStudiesThumbnails(ids) {
+    let url = 'https://idr-testing.openmicroscopy.org/gallery/api/thumbnails/';
+    // remove duplicates
+    console.log('loadStudiesThumbnails', ids);
+    // ids = [...new Set(ids)];
+    // find any thumbnails we already have in hand...
+    let found = {};
+    let toFind = [];
+    ids.forEach(id => {
+      console.log('id', id);
+      let study = this.getStudyById(id);
+      if (study && study.image && study.thumbnail) {
+        found[id] = {image: study.image, thumbnail: study.thumbnail};
+      } else {
+        toFind.push(id);
+      }
+    });
+    if (Object.keys(found).length > 0) {
+      callback(found);
+    }
+
+    toFind = toFind.map(id => id.replace('-', '='));
+    let batchSize = 10;
+    while (toFind.length > 0) {
+      let params = toFind.slice(0, batchSize).join('&');
+      fetch(url + '?' + params)
+        .then(response => response.json())
+        .then(data => {
+          for (let studyId in data) {
+            let study = this.getStudyById(studyId);
+            if (data[studyId]) {
+              study.image = data[studyId].image;
+              study.thumbnail = data[studyId].thumbnail;
+            }
+          }
+        });
+      toFind = toFind.slice(batchSize);
+    }
+  }
 }
