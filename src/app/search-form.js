@@ -7,7 +7,7 @@ import 'regenerator-runtime/runtime';
 import {activationStrategy} from 'aurelia-router';
 
 @inject(Router)
-export class SecretMessageCustomElement {
+export class SearchFormCustomElement {
   secretMessage = 'Be sure to drink your Ovaltine!';
 
     searchKey = 'antibody';
