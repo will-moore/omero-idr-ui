@@ -6,16 +6,18 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import {activationStrategy} from 'aurelia-router';
 
-@inject(Router)
+import Context from './context';
+
+@inject(Context, Router)
 export default class Search {
 
-    searchKey = 'antibody';
-
-    searchValue = null;
+    searchQuery = {};
 
     router = null;
 
-    constructor(router) {
+    // TODO: Do we need router?
+    constructor(context, router) {
+      this.context = context;
       this.router = router;
     }
 
@@ -29,13 +31,12 @@ export default class Search {
     activate(params, routeConfig) {
       console.log('activate', params);
       // TODO: handle search...
+      this.searchQuery = params;
     }
 
-    searchChanged(event) {
-      if (event.which === 13) {
-        let query = `${this.searchKey}:${this.searchValue}`;
-        this.router.navigateToRoute('search', {query},
-        );
+    get filteredStudies() {
+      if (this.searchQuery.query) {
+        return this.context.studiesModel.filterStudiesByMapQuery(this.searchQuery.query);
       }
     }
 }

@@ -375,20 +375,11 @@ export default class StudiesModel {
     let url = 'https://idr-testing.openmicroscopy.org/gallery/api/thumbnails/';
     // remove duplicates
     // ids = [...new Set(ids)];
-    // find any thumbnails we already have in hand...
-    let found = {};
-    let toFind = [];
-    ids.forEach(id => {
+    // only load thumbnails we don't already have in hand
+    let toFind = ids.filter(id => {
       let study = this.getStudyById(id);
-      if (study && study.image && study.thumbnail) {
-        found[id] = {image: study.image, thumbnail: study.thumbnail};
-      } else {
-        toFind.push(id);
-      }
+      return !(study && study.image && study.thumbnail);
     });
-    if (Object.keys(found).length > 0) {
-      callback(found);
-    }
 
     toFind = toFind.map(id => id.replace('-', '='));
     let batchSize = 10;

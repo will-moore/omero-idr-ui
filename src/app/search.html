@@ -4,11 +4,14 @@
         SEARCH
     </div>
 
-    <form submit.trigger="searchChanged($event)">
-        <select value.bind="searchKey">
-            <option value="gene">Gene</option>
-            <option value="antibody">Antibody</option>
-        </select>
-        <input keyup.trigger="searchChanged($event)" type="text" placeholder="Value" value.bind="searchValue">
-    </form>
+    <require from="./secret-message"></require>
+
+    <secret-message></secret-message>
+
+    <ul class="list-group">
+        <li repeat.for="study of filteredStudies">
+            ${study.Name}
+            <img src="${study.thumbnail}" />
+        </li>
+    </ul>
 </template>
