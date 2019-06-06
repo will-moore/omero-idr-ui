@@ -1,14 +1,13 @@
 
 <template>
 
-        <form submit.trigger="searchChanged($event)">
-            <select value.bind="searchKey">
-                <option value="gene">Gene</option>
-                <option value="antibody">Antibody</option>
-            </select>
-            <input keyup.trigger="searchChanged($event)" type="text" placeholder="Value" value.bind="searchValue">
-        </form>
+  <form submit.trigger="searchChanged($event)">
+    <select change.trigger="handleSelectKey($event)" value.bind="searchkey">
+      <template repeat.for="key of FILTER_KEYS">
+        <option value="${ key.value || key }">${ key.label || key }</option>
+      </template>
+    </select>
+    <input keyup.trigger="searchChanged($event)" type="text" placeholder="Value" value.bind="searchvalue">
+  </form>
 
   </template>
-  
-

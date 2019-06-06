@@ -1,18 +1,16 @@
 
 <template>
-    <div class="no-selection text-center">
-        SEARCH
-    </div>
+  <div class="no-selection text-center">
+    SEARCH
+  </div>
 
-    <require from="./search-form"></require>
+  <require from="./search-form"></require>
+  <search-form searchkey.two-way="searchkey" searchvalue.two-way="searchvalue"></search-form>
 
-    <search-form></search-form>
-
-
-    <ul class="list-group">
-        <li repeat.for="study of filteredStudies">
-            ${study.Name}
-            <img src="${study.thumbnail}" />
-        </li>
-    </ul>
+  <ul class="list-group">
+    <li repeat.for="study of filteredStudies">
+      ${study.Name}
+      <img src="${study.thumbnail}" />
+    </li>
+  </ul>
 </template>

@@ -11,32 +11,39 @@ import Context from './context';
 @inject(Context, Router)
 export default class Search {
 
-    searchQuery = {};
+  searchkey = 'Organism';
+  searchvalue = 'foo';
 
-    router = null;
+  router = null;
 
-    // TODO: Do we need router?
-    constructor(context, router) {
-      this.context = context;
-      this.router = router;
+  // TODO: Do we need router?
+  constructor(context, router) {
+    this.context = context;
+    this.router = router;
+  }
+
+  // This is necessary to tell Aurelia router not to reuse
+  // the same view model whenever navigating between pages
+  // so that the activate method gets called each time
+  determineActivationStrategy() {
+    return activationStrategy.replace;
+  }
+
+  activate(params, routeConfig) {
+    console.log('Search Form params...', params);
+    // TODO: handle search...
+    if (params.query) {
+      this.searchkey = params.query.split(':')[0];
+      this.searchvalue = params.query.split(':')[1];
+      console.log('...this.searchkey', this.searchkey, 'this.searchvalue', this.searchvalue);
     }
+  }
 
-    // This is necessary to tell Aurelia router not to reuse 
-    // the same view model whenever navigating between pages
-    // so that the activate method gets called each time
-    determineActivationStrategy() {
-      return activationStrategy.replace;
-    }
-
-    activate(params, routeConfig) {
-      console.log('activate', params);
-      // TODO: handle search...
-      this.searchQuery = params;
-    }
-
-    get filteredStudies() {
-      if (this.searchQuery.query) {
-        return this.context.studiesModel.filterStudiesByMapQuery(this.searchQuery.query);
-      }
-    }
+  get filteredStudies() {
+    // if (this.searchkey && this.searchvalue) {
+    let query = `${ this.searchkey }:${ this.searchvalue }`;
+    console.log(query);
+    return this.context.studiesModel.filterStudiesByMapQuery(query);
+    // }
+  }
 }

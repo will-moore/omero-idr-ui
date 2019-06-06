@@ -1,44 +1,43 @@
 
-import {inject} from 'aurelia-framework';
+import {inject, bindable, bindingMode} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import {activationStrategy} from 'aurelia-router';
+import Context from './context';
 
-@inject(Router)
+@inject(Context, Router)
 export class SearchFormCustomElement {
-  secretMessage = 'Be sure to drink your Ovaltine!';
+  FILTER_KEYS = [{'label': 'Name (IDR number)', 'value': 'Name'},
+    'Imaging Method',
+    'License', 'Organism',
+    'Publication Authors',
+    'Publication Title',
+    'Screen Technology Type',
+    'Screen Type',
+    'Study Type']
 
-    searchKey = 'antibody';
+  @bindable({ defaultBindingMode: bindingMode.twoWay }) searchkey = null;
 
-    searchValue = null;
+  @bindable({ defaultBindingMode: bindingMode.twoWay }) searchvalue = null;
 
-    router = null;
+  router = null;
 
-    constructor(router) {
-      console.log('Search Form constructor');
-      this.router = router;
+  constructor(context, router) {
+    this.context = context;
+    this.router = router;
+  }
+
+  handleSelectKey(event) {
+    let key = event.target.value;
+    this.searchkey = key;
+  }
+
+  searchChanged(event) {
+    if (event.which === 13) {
+      let query = `${this.searchkey}:${this.searchvalue}`;
+      this.router.navigateToRoute('search', {query},
+      );
     }
-
-    // This is necessary to tell Aurelia router not to reuse 
-    // the same view model whenever navigating between pages
-    // so that the activate method gets called each time
-    // determineActivationStrategy() {
-    //   return activationStrategy.replace;
-    // }
-
-    activate(params, routeConfig) {
-      console.log('Search Form', params);
-      // TODO: handle search...
-    }
-
-    searchChanged(event) {
-      if (event.which === 13) {
-        let query = `${this.searchKey}:${this.searchValue}`;
-        this.router.navigateToRoute('search', {query},
-        );
-      }
-    }
+  }
 }
-

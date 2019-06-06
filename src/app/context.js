@@ -9,10 +9,8 @@ export default class Context {
     baseUrl = 'https://idr.openmicroscopy.org/'
 
     constructor() {
-        this.studiesModel = new StudiesModel(this.baseUrl);
-        console.log('studiesModel', this.studiesModel);
-
-        this.studiesModel.loadStudies();
+      this.studiesModel = new StudiesModel(this.baseUrl);
+      this.studiesModel.loadStudies();
     }
 
 }
