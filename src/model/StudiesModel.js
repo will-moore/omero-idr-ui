@@ -152,6 +152,10 @@ export default class StudiesModel {
         // load Map Anns for Studies...
         this.loadStudiesMapAnnotations();
 
+        if (this.loadThumbsWhenReady) {
+          this.loadStudiesThumbnails();
+        }
+
     }).catch((err) => {
       console.error(err);
     });
@@ -373,14 +377,26 @@ export default class StudiesModel {
 
 
   loadStudiesThumbnails(ids) {
+    if (this.studies.length === 0) {
+      this.loadThumbsWhenReady = true;
+      return;
+    }
+    this.loadThumbsWhenReady = true;
+
     let url = 'https://idr-testing.openmicroscopy.org/gallery/api/thumbnails/';
     // remove duplicates
     // ids = [...new Set(ids)];
     // only load thumbnails we don't already have in hand
-    let toFind = ids.filter(id => {
-      let study = this.getStudyById(id);
-      return !(study && study.image && study.thumbnail);
-    });
+    let toFind;
+    if (!ids) {
+      toFind = this.studies.filter(study => !(study.image && study.thumbnail))
+        .map(study => (study.type + '-' + study.id));
+    } else {
+      toFind = ids.filter(id => {
+        let study = this.getStudyById(id);
+        return !(study && study.image && study.thumbnail);
+      });
+    }
 
     toFind = toFind.map(id => id.replace('-', '='));
     let batchSize = 10;

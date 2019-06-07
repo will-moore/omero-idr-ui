@@ -20,6 +20,8 @@ export default class Search {
   constructor(context, router) {
     this.context = context;
     this.router = router;
+    // Load thumbnails if not already loaded
+    this.context.studiesModel.loadStudiesThumbnails();
   }
 
   // This is necessary to tell Aurelia router not to reuse
@@ -43,7 +45,6 @@ export default class Search {
   get filteredStudies() {
     // if (this.searchkey && this.searchvalue) {
     let query = `${ this.searchkey }:${ this.searchvalue }`;
-    console.log(query);
     return this.context.studiesModel.filterStudiesByMapQuery(query);
     // }
   }

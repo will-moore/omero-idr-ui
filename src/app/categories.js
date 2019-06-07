@@ -1,51 +1,20 @@
 
 import {inject, computedFrom} from 'aurelia-framework';
-import {BindingEngine, bindable} from 'aurelia-framework';
+import {bindable} from 'aurelia-framework';
 
 import Context from './context';
 
-@inject(Context, BindingEngine)
+@inject(Context)
 export class Categories {
     @bindable studies = null;
     annotationsObserver = null;
 
-    constructor(context, bindingEngine) {
+    constructor(context) {
       this.context = context;
-      this.bindingEngine = bindingEngine;
       this.message = 'Welcome to IDR';
-    }
 
-    bind() {
-      this.waitForAnnotationsLoaded();
-    }
-
-    waitForAnnotationsLoaded() {
-      if (this.regions_info === null) return;
-
-      // tear down old observers
-      this.unregisterObservers();
-      if (this.context.studiesModel.annotationsLoaded) {
-        this.loadCategoryImages();
-        return;
-      }
-
-      // we are not yet ready, wait for ready via observer
-      if (this.annotationsObserver === null) {
-        this.annotationsObserver = this.bindingEngine
-          .propertyObserver(this.context.studiesModel, 'annotationsLoaded')
-          .subscribe((newValue, oldValue) => this.loadCategoryImages());
-      }
-    }
-
-    loadCategoryImages() {
-      let model = this.context.studiesModel;
-      let queries = ['Study Type:time', 'Study Type:light sheet'];
-      let studyIds = [];
-      queries.forEach(q => {
-        let studies = model.filterStudiesByMapQuery(q);
-        studies.forEach(s => studyIds.push(s.type + '-' + s.id));
-      });
-      model.loadStudiesThumbnails(studyIds);
+      // Load thumbnails if not already loaded
+      this.context.studiesModel.loadStudiesThumbnails();
     }
 
     // When 'ready' (map annotations loaded) we re-render this
@@ -57,12 +26,5 @@ export class Categories {
     @computedFrom('context.studiesModel.annotationsLoaded')
     get lightSheetStudies() {
       return this.context.studiesModel.filterStudiesByMapQuery('Study Type:light sheet');
-    }
-
-    unregisterObservers(property_only = false) {
-      if (this.annotationsObserver) {
-        this.annotationsObserver.dispose();
-        this.annotationsObserver = null;
-      }
     }
 }
