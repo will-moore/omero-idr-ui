@@ -1,5 +1,5 @@
 
-import {inject} from 'aurelia-framework';
+import {inject, computedFrom} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
 
 import 'core-js/stable';
@@ -39,6 +39,7 @@ export default class Search {
     }
   }
 
+  @computedFrom('searchkey', 'searchvalue', 'context.studiesModel.annotationsLoaded')
   get filteredStudies() {
     // if (this.searchkey && this.searchvalue) {
     let query = `${ this.searchkey }:${ this.searchvalue }`;

@@ -206,6 +206,7 @@ export default class StudiesModel {
 
 
   filterStudiesByMapQuery(query) {
+    console.log('filterStudiesByMapQuery', query, 'studies', this.studies.length);
 
     if (query.startsWith("FIRST") || query.startsWith("LAST")) {
       // E.g. query is 'FIRST10:date' sort by 'date' and return first 10

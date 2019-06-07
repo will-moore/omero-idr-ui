@@ -1,5 +1,5 @@
 
-import {inject} from 'aurelia-framework';
+import {inject, computedFrom} from 'aurelia-framework';
 import {BindingEngine, bindable} from 'aurelia-framework';
 
 import Context from './context';
@@ -48,13 +48,14 @@ export class Categories {
       model.loadStudiesThumbnails(studyIds);
     }
 
+    // When 'ready' (map annotations loaded) we re-render this
+    @computedFrom('context.studiesModel.annotationsLoaded')
     get timelapseStudies() {
-      // let studies = this.context.studiesModel.studies;
       return this.context.studiesModel.filterStudiesByMapQuery('Study Type:time');
     }
 
+    @computedFrom('context.studiesModel.annotationsLoaded')
     get lightSheetStudies() {
-      // let studies = this.context.studiesModel.studies;
       return this.context.studiesModel.filterStudiesByMapQuery('Study Type:light sheet');
     }
 
