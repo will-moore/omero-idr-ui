@@ -7,7 +7,18 @@
         <option value="${ key.value || key }">${ key.label || key }</option>
       </template>
     </select>
-    <input keyup.trigger="searchChanged($event)" type="text" placeholder="Value" value.bind="searchvalue">
+    <!-- <input keyup.trigger="searchChanged($event)" type="text" placeholder="Value" value.bind="searchvalue"> -->
+
+    <auto-complete
+      items.bind="results"
+      label.bind="customLabel"
+      result.two-way="autocompleteObject"
+    ></auto-complete>
+    <!-- view-model.ref="autocomplete" -->
+
+    ${searchkey}: ${searchvalue} - ${autocompleteObject.value}
+
+    <button type="submit">Go</button>
   </form>
 
   </template>

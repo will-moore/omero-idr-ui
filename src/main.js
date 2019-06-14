@@ -5,7 +5,8 @@ import {PLATFORM} from 'aurelia-pal';
 import jQuery from 'jquery';
 import { Foundation } from 'foundation-sites/js/foundation.core';
 import Context from './app/context';
-import {RouterConfiguration, Router} from 'aurelia-router';
+
+// import {RouterConfiguration, Router} from 'aurelia-router';
 // import { Dropdown } from 'foundation-sites/js/foundation.dropdown';
 // import { DropdownMenu } from 'foundation-sites/js/foundation.dropdownMenu';
 
@@ -32,7 +33,8 @@ export function configure(aurelia) {
     .standardConfiguration()
     .feature(PLATFORM.moduleName('resources/index'));
 
-  aurelia.use.developmentLogging(environment.debug ? 'debug' : 'warn');
+  aurelia.use.developmentLogging(environment.debug ? 'debug' : 'warn')
+    .plugin(PLATFORM.moduleName('aurelia-autocomplete'));
 
   if (environment.testing) {
     aurelia.use.plugin(PLATFORM.moduleName('aurelia-testing'));

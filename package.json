@@ -10,6 +10,7 @@
   "dependencies": {
     "acorn": "^6.1.1",
     "aurelia-animator-css": "^1.0.4",
+    "aurelia-autocomplete": "^3.1.0",
     "aurelia-bootstrapper": "^2.3.2",
     "foundation-sites": "^6.5.3",
     "jquery": "^3.4.1",

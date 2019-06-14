@@ -148,7 +148,8 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
       // jQuery: 'jquery'
     }),
     new ModuleDependenciesPlugin({
-      'aurelia-testing': ['./compile-spy', './view-spy']
+      'aurelia-testing': ['./compile-spy', './view-spy'],
+      'aurelia-autocomplete': [ './component/autocomplete', './component/bootstrap/autocomplete.html' ]
     }),
     new HtmlWebpackPlugin({
       template: 'index.ejs',
