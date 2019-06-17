@@ -11,6 +11,7 @@ import Context from './app/context';
 // import { DropdownMenu } from 'foundation-sites/js/foundation.dropdownMenu';
 
 import 'foundation-sites/dist/css/foundation.min.css';
+import './resources/css/idr.css';
 
 export function configure(aurelia) {
 
